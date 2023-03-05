@@ -54,3 +54,14 @@
 
 ## Make your web app use the code from your git repo
 
+4. You will need a Bash console to execute git commands, and clone / pull your repo
+    4.1 Go to Consoles > Start a new console > Bash
+    4.2 cd into your web app root folder and clone the repo (if it is not public you will have to setup credentials)
+    ```
+    cd class-06-03-23
+    rm app.py
+    git init
+    git remote add origin https://github.com/mduhagon/prep-class-06-03-23.git
+    git remote -v
+    git pull origin main
+    ```
