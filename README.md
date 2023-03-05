@@ -16,7 +16,7 @@
     3.3 Select Flask as Python Web Framework
     3.4 Python version: 3.10
     3.5 Set a path for your initial app file, like: ``/home/mduhagon/class-06-03-23/app.py``
-    3.6 Check your empty web app now, you should see a 'Hello from Flask!' message when you access the home page. Check the code that was created in app.py, Python Anywhere requires you to tweak a few things, i.e you do not call app.run() from your code. You also get a configuration file called something like ``/var/www/username_pythonanywhere_com_wsgi.py``, there is important configuration there for starting your app the right way:
+    3.6 Check your empty web app now, you should see a 'Hello from Flask!' message when you access the home page. Check the code that was created in app.py, Python Anywhere requires you to tweak a few things, i.e you do not call app.run() directly from your code (within an if based on __name__ is ok). You also get a configuration file called something like ``/var/www/username_pythonanywhere_com_wsgi.py``, there is important configuration there for starting your app the right way:
 
     ```
     # This file contains the WSGI configuration required to serve up your
@@ -51,6 +51,9 @@
         return 'Hello from Flask!'
     ```
 
+    This guide explains more in depth how to deal with Flask in Python Anywhere:
+    https://help.pythonanywhere.com/pages/Flask
+
 
 ## Make your web app use the code from your git repo
 
@@ -65,3 +68,14 @@
     git remote -v
     git pull origin main
     ```
+
+    Optionally:
+    ```
+    git branch --set-upstream-to=origin/main master
+    ```
+
+
+## Setting up the map demo
+
+virtualenv --python=python3.10 /home/mduhagon/webapp-virtualenv
+https://help.pythonanywhere.com/pages/RebuildingVirtualenvs/
