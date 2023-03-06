@@ -6,7 +6,7 @@ from flask import Flask, request, abort, jsonify, render_template, url_for, flas
 from flask_cors import CORS
 import traceback
 from forms import NewLocationForm
-from models import setup_db, SampleLocation, db_drop_and_create_all
+from models import Geometry, setup_db, SampleLocation, db_drop_and_create_all
 
 def create_app(test_config=None):
     # create and configure the app
@@ -18,7 +18,7 @@ def create_app(test_config=None):
     app.config['SECRET_KEY'] = SECRET_KEY
 
     """ uncomment at the first time running the app. Then comment back so you do not erase db content over and over """
-    #db_drop_and_create_all()
+    db_drop_and_create_all()
 
     @app.route('/', methods=['GET'])
     def home():
@@ -46,12 +46,11 @@ def create_app(test_config=None):
             longitude = float(form.coord_longitude.data)
             description = form.description.data
 
-            SampleLocation(
-                id=uuid4(),
+            location = SampleLocation(
                 description=description,
-                location_longitude=longitude,
-                location_latitude=latitude
-            ).save()   
+                geom=Geometry.point_representation(latitude=latitude, longitude=longitude)
+            )   
+            location.insert()
 
             flash(f'New location created!', 'success')
             return redirect(url_for('home'))

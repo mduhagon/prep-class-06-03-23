@@ -149,3 +149,16 @@ export DATABASE_USER=username
 export DATABASE_PASS=password
 export DATABASE_HOST=mongodb+srv://clustername.xxxxx.mongodb.net/clustername
 ```
+
+Initialize MySQL:
+- Provide a password. Save it somewhere local for use from the code later.
+
+You cannot connect to the DB in PythonAnywhere from the outside with a free account:
+(https://help.pythonanywhere.com/pages/AccessingMySQLFromOutsidePythonAnywhere/)
+
+So, to use MySQl locally, you need to install the DB engine:
+https://dev.mysql.com/downloads/mysql/
+You will be asked to set a root account password, set it and sotre it somewhere local for use from the code later. 
+
+
+sudo apt-get install libmysqlclient-dev
