@@ -128,27 +128,7 @@ from app import app as application  # noqa
 
 ## What to use as a database from Python anywhere?
 
-
-Unfortunately Python anywhere free version does not include Postgres or PostGIS (the geospatial functions)
-An alternative is to use MongoDB Atlas, a NoSQL store that does provide geospatial capabilities,
-but, also unfortunate! flask libs for Mongo don't seem to support geospatial data, so... it is 
-possible still to use Mongo, but we won't use any geospatial features, yust store regular data there.
-
-For this, you need to use the following library instead of SQLAlchemy:
-
-https://pypi.org/project/flask-mongoengine/
-
-And setup a DB / Cluster in Mongo DB Atlas site:
-https://www.mongodb.com/atlas/database
-
-The Mongo DB access details will need to be set as environment variables 
-(so they are not part of your code, which is publicly visible in git):
-
-```
-export DATABASE_USER=username
-export DATABASE_PASS=password
-export DATABASE_HOST=mongodb+srv://clustername.xxxxx.mongodb.net/clustername
-```
+PythonAnywhere comes with a free MySQL database.
 
 Initialize MySQL:
 - Provide a password. Save it somewhere local for use from the code later.
@@ -160,5 +140,21 @@ So, to use MySQl locally, you need to install the DB engine:
 https://dev.mysql.com/downloads/mysql/
 You will be asked to set a root account password, set it and sotre it somewhere local for use from the code later. 
 
+You will need to use the following additional python lib:
+```
+pip install mysqlclient
+```
 
+Depending on the OS you might also need to have the mysql client in your OS. For Linux / Ubuntu you can install that as:
+```
 sudo apt-get install libmysqlclient-dev
+```
+
+You will need to have the following environemnt variable (with the correct values for you) in your local .env file and in the one in PythonAnywhere:
+```
+export DATABASE_URL=mysql://user:pass@host:3306/dbname
+```
+
+The first time you run your code, you need to create the tables / initialize the db, in this sample that is done by the function
+```db_drop_and_create_all()```
+But every time this function executes, all newly added data dissapears, so you want to run it only when needed and then comment it out.
