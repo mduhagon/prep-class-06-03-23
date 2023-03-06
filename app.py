@@ -1,5 +1,7 @@
 import os
 import sys
+from uuid import uuid4
+from dotenv import load_dotenv
 from flask import Flask, request, abort, jsonify, render_template, url_for, flash, redirect
 from flask_cors import CORS
 import traceback
@@ -44,11 +46,12 @@ def create_app(test_config=None):
             longitude = float(form.coord_longitude.data)
             description = form.description.data
 
-            location = SampleLocation(
+            SampleLocation(
+                id=uuid4(),
                 description=description,
-                geom=SampleLocation.point_representation(latitude=latitude, longitude=longitude)
-            )   
-            location.insert()
+                location_longitude=longitude,
+                location_latitude=latitude
+            ).save()   
 
             flash(f'New location created!', 'success')
             return redirect(url_for('home'))
@@ -114,5 +117,8 @@ def create_app(test_config=None):
 
 app = create_app()
 if __name__ == '__main__':
+    project_home = '/home/mdu/prep-class-06-03-23-2/'
+    load_dotenv(os.path.join(project_home, '.env'))
+
     port = int(os.environ.get("PORT",5000))
     app.run(host='127.0.0.1',port=port,debug=True)

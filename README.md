@@ -77,5 +77,75 @@
 
 ## Setting up the map demo
 
-virtualenv --python=python3.10 /home/mduhagon/webapp-virtualenv
-https://help.pythonanywhere.com/pages/RebuildingVirtualenvs/
+Setup a virtual env (https://help.pythonanywhere.com/pages/RebuildingVirtualenvs/):
+
+```
+mkvirtualenv --python=python3.10 webapp-virtualenv
+workon webapp-virtualenv
+pip install -r requirements.txt
+```
+Also you need to set the virtual env path on the config page of the web app
+
+
+## Setting ENV variables in Python anywhere
+
+https://help.pythonanywhere.com/pages/environment-variables-for-web-apps/
+
+```
+workon webapp-virtualenv
+pip install python-dotenv
+```
+
+Save the secrets in an ```.env file (and keep this always out of git!!!!!):
+
+```
+echo "export GOOGLE_MAPS_API_KEY=somethingelse" >> .env
+```
+
+Update the wsgi file:
+```
+# This file contains the WSGI configuration required to serve up your
+# web application at http://<your-username>.pythonanywhere.com/
+# It works by setting the variable 'application' to a WSGI handler of some
+# description.
+#
+# The below has been auto-generated for your Flask project
+
+import sys
+import os
+from dotenv import load_dotenv
+
+# add your project directory to the sys.path
+project_home = '/home/mduhagon/class-06-03-23'
+if project_home not in sys.path:
+    sys.path = [project_home] + sys.path
+
+load_dotenv(os.path.join(project_home, '.env'))
+
+# import flask app but need to call it "application" for WSGI to work
+from app import app as application  # noqa
+```
+
+## What to use as a database from Python anywhere?
+
+
+Unfortunately Python anywhere free version does not include Postgres or PostGIS (the geospatial functions)
+An alternative is to use MongoDB Atlas, a NoSQL store that does provide geospatial capabilities,
+but, also unfortunate! flask libs for Mongo don't seem to support geospatial data, so... it is 
+possible still to use Mongo, but we won't use any geospatial features, yust store regular data there.
+
+For this, you need to use the following library instead of SQLAlchemy:
+
+https://pypi.org/project/flask-mongoengine/
+
+And setup a DB / Cluster in Mongo DB Atlas site:
+https://www.mongodb.com/atlas/database
+
+The Mongo DB access details will need to be set as environment variables 
+(so they are not part of your code, which is publicly visible in git):
+
+```
+export DATABASE_USER=username
+export DATABASE_PASS=password
+export DATABASE_HOST=mongodb+srv://clustername.xxxxx.mongodb.net/clustername
+```
